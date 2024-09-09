@@ -1,0 +1,6 @@
+export type Player = {
+  id: string;
+  name: string;
+  color: string;
+  territories: number;
+};

@@ -1,5 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@rneui/themed";
+import { useRouter } from "expo-router";
+import { nanoid } from "nanoid/non-secure";
 import React, { useEffect, useState } from "react";
 import {
   FieldArrayWithId,
@@ -15,6 +17,8 @@ import { Button } from "~/components/button";
 import { Input } from "~/components/input";
 import { Item, Select } from "~/components/select";
 import { Colors } from "~/constants/colors";
+import { useGameStore } from "~/hooks/store/gameStore";
+import { Player } from "~/types/models/player";
 import { NewGameForm, newGameSchema } from "~/types/schemas/new-game-schema";
 
 type CardPlayerFormProps = {
@@ -55,9 +59,8 @@ const CardPlayerForm = ({ field, idx, remove }: CardPlayerFormProps) => {
         prevDisabledColors.length === disabledIndices.length &&
         prevDisabledColors.every((value, i) => value === disabledIndices[i]);
 
-      if (!isSame) {
-        return disabledIndices;
-      }
+      if (!isSame) return disabledIndices;
+
       return prevDisabledColors;
     });
   }, [playerColors, colors]);
@@ -96,10 +99,14 @@ const CardPlayerForm = ({ field, idx, remove }: CardPlayerFormProps) => {
 };
 
 export default function NewGameScreen() {
+  const router = useRouter();
+  const startGame = useGameStore((s) => s.startGame);
+
   const methods = useForm<NewGameForm>({
     defaultValues: { players: [{ name: "", color: "" }] },
     resolver: zodResolver(newGameSchema),
   });
+
   const { fields, append, remove } = useFieldArray({
     control: methods.control,
     name: "players",
@@ -111,8 +118,23 @@ export default function NewGameScreen() {
     append({ name: "", color: "" });
   };
 
-  const startGame: SubmitHandler<NewGameForm> = (data) => {
-    data.players.map((p) => console.log(p));
+  const onSubmit: SubmitHandler<NewGameForm> = async (data) => {
+    try {
+      const amount_territories = 44 / data.players.length;
+
+      const players: Player[] = data.players.map((p) => ({
+        id: nanoid(5),
+        name: p.name,
+        color: p.color,
+        territories: amount_territories | 0,
+      }));
+
+      await startGame(players);
+
+      router.replace("/current-game");
+    } catch (error) {
+      console.log({ error });
+    }
   };
 
   return (
@@ -135,7 +157,7 @@ export default function NewGameScreen() {
             <Button disabled={fields.length === 6} onPress={addPlayer}>
               Adicionar jogador
             </Button>
-            <Button onPress={methods.handleSubmit(startGame)}>
+            <Button onPress={methods.handleSubmit(onSubmit)}>
               Começar{errorMessage && ` - ${errorMessage}`}
             </Button>
           </View>

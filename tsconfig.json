@@ -1,12 +1,16 @@
 {
-  "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    "module": "ES2022",
+    "jsx": "react-native",
     "strictNullChecks": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "paths": {
-      "~/*": ["./*"]
+      "~/*": [
+        "./*"
+      ]
     }
-  }
+  },
+  "extends": "expo/tsconfig.base"
 }

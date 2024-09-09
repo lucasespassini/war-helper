@@ -1,10 +1,13 @@
 import { Text } from "@rneui/themed";
-import { useRouter } from "expo-router";
+import { useRouter,  } from "expo-router";
 import { View } from "react-native";
 import { Button } from "~/components/button";
+import { useGameStore } from "~/hooks/store/gameStore";
 
 export default function HomeScreen() {
   const router = useRouter();
+
+  const game = useGameStore((s) => s.game);
 
   return (
     <View
@@ -16,11 +19,14 @@ export default function HomeScreen() {
       }}
     >
       <View>
-        <Text>War</Text>
-        <Text>Helper</Text>
+        <Text>War Helper</Text>
       </View>
 
-      <Button size="lg" onPress={() => router.push("/current-game")}>
+      <Button
+        size="lg"
+        disabled={!game}
+        onPress={() => router.push("/current-game")}
+      >
         Continuar
       </Button>
 
