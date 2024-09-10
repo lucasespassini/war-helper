@@ -79,7 +79,7 @@ const CardPlayerForm = ({ field, idx, remove }: CardPlayerFormProps) => {
         name={`players.${idx}.name` as const}
         label={`Jogador ${idx + 1}`}
         placeholder="Nome"
-        containerStyle={{ width: "50%" }}
+        containerStyle={{ width: "55%" }}
       />
 
       <Select
@@ -122,18 +122,20 @@ export default function NewGameScreen() {
     try {
       const amount_territories = 44 / data.players.length;
 
-      const players: Player[] = data.players.map((p) => ({
+      const players: Player[] = data.players.map((p, idx) => ({
         id: nanoid(5),
         name: p.name,
         color: p.color,
+        order: idx + 1,
         territories: amount_territories | 0,
+        cards: 0,
       }));
 
       await startGame(players);
 
       router.replace("/current-game");
     } catch (error) {
-      console.log({ error });
+      console.warn({ error });
     }
   };
 
@@ -141,7 +143,7 @@ export default function NewGameScreen() {
     <FormProvider {...methods}>
       <ScrollView
         keyboardDismissMode="interactive"
-        style={{ height: "100%", paddingVertical: 20, position: "relative" }}
+        style={{ height: "100%", paddingVertical: 20 }}
       >
         <View style={{ height: "100%", gap: 10 }}>
           {fields.map((field, idx) => (
@@ -153,7 +155,7 @@ export default function NewGameScreen() {
             />
           ))}
 
-          <View style={{ width: "100%", gap: 10 }}>
+          <View style={{ width: "100%", paddingHorizontal: 10, gap: 10 }}>
             <Button disabled={fields.length === 6} onPress={addPlayer}>
               Adicionar jogador
             </Button>

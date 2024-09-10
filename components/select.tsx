@@ -18,7 +18,7 @@ export const Select = ({ name, options, disabledOptions }: SelectProps) => {
       <View
         style={{
           paddingVertical: 7,
-          width: 100,
+          width: 105,
           alignItems: "center",
           flexDirection: "row",
           gap: 5,
