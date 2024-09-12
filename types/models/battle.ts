@@ -1,12 +1,12 @@
 import { Player } from "./player";
 
-type PlayerBattle = {
+export type PlayerBattle = {
   troops: number;
   casualties: number;
   player: Player;
 };
 
-type Result = {
+export type Result = {
   attacker_result: 1 | 2 | 3 | 4 | 5 | 6;
   defender_result: 1 | 2 | 3 | 4 | 5 | 6;
 };

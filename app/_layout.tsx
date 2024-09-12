@@ -49,7 +49,19 @@ export default function Layout() {
               backgroundColor: "#212121",
             },
           }}
-        />
+        >
+          <Stack.Screen name="index" />
+          <Stack.Screen name="new-game" />
+          <Stack.Screen name="current-game" />
+          <Stack.Screen
+            name="battlefield"
+            options={{ presentation: "modal" }}
+          />
+          <Stack.Screen
+            name="select-troops"
+            options={{ presentation: "modal" }}
+          />
+        </Stack>
       </ThemeProvider>
     </SafeAreaProvider>
   );

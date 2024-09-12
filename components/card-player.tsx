@@ -1,4 +1,5 @@
 import { Badge, Icon, Text } from "@rneui/themed";
+import { router } from "expo-router";
 import { TouchableOpacity, View } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useGameStore } from "~/hooks/store/gameStore";
@@ -10,7 +11,7 @@ type CardPlayerProps = {
 };
 
 export const CardPlayer = ({ current_turn, player }: CardPlayerProps) => {
-  const round = useGameStore((s) => s.game.round);
+  const game = useGameStore((s) => s.game);
 
   return (
     <View
@@ -25,7 +26,7 @@ export const CardPlayer = ({ current_turn, player }: CardPlayerProps) => {
         <View style={{ alignItems: "center", flexDirection: "row", gap: 10 }}>
           <Icon name="circle" color={player.color} />
           <Text style={{ fontSize: 17, fontWeight: 700 }}>{player.name}</Text>
-          {current_turn && round !== 1 && (
+          {current_turn && game.round !== 1 && (
             <Badge
               value="Seu turno"
               status="primary"
@@ -40,8 +41,19 @@ export const CardPlayer = ({ current_turn, player }: CardPlayerProps) => {
         </View>
       </View>
 
-      {!current_turn && round !== 1 && (
-        <TouchableOpacity style={{ padding: 5 }}>
+      {!current_turn && game.round !== 1 && (
+        <TouchableOpacity
+          style={{ padding: 5 }}
+          onPress={() =>
+            router.push({
+              pathname: "select-troops",
+              params: {
+                attacker: JSON.stringify(game.players[0]),
+                defender: JSON.stringify(player),
+              },
+            })
+          }
+        >
           <MaterialIcons
             name="location-searching"
             color="#fff"

@@ -24,9 +24,9 @@ const Header = () => {
 };
 
 export default function CurrentGameScreen() {
-  const [game, nextRound, reset] = useGameStore((s) => [
+  const [game, nextTurn, reset] = useGameStore((s) => [
     s.game,
-    s.nextRound,
+    s.nextTurn,
     s.reset,
   ]);
 
@@ -53,7 +53,7 @@ export default function CurrentGameScreen() {
       {game.players[0].cards > 3 && (
         <Button disabled={game.players[0].cards < 3}>Trocar cartas</Button>
       )}
-      <Button onPress={nextRound}>
+      <Button onPress={nextTurn}>
         {game.round === 1 ? "Iniciar" : "Encerrar turno"}
       </Button>
     </View>
