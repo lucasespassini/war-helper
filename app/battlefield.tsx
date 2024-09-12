@@ -1,6 +1,6 @@
 import { Icon, Text } from "@rneui/themed";
 import { useLocalSearchParams } from "expo-router";
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { BattleDivider } from "~/components/battle-divider";
 import { Player } from "~/types/models/player";
 
@@ -25,12 +25,29 @@ export default function BattlefieldScreen() {
   const defender: Player = JSON.parse(localSearchParams.defender);
 
   return (
-    <View>
-      <CardPlayer {...attacker} />
+    <ScrollView
+      contentContainerStyle={{
+        height: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <View style={{ alignItems: "center" }}>
+        <View
+          style={{
+            width: "50%",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 50,
+          }}
+        >
+          <CardPlayer {...attacker} />
 
-      <BattleDivider />
+          <BattleDivider />
 
-      <CardPlayer {...defender} />
-    </View>
+          <CardPlayer {...defender} />
+        </View>
+      </View>
+    </ScrollView>
   );
 }
