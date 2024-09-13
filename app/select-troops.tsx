@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon, Text } from "@rneui/themed";
 import { router, useLocalSearchParams } from "expo-router";
+import { useEffect } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { ScrollView, View } from "react-native";
 import { BattleDivider } from "~/components/battle-divider";
@@ -54,14 +55,13 @@ export default function SelectTroopsScreen() {
 
     await startBattle(attackerBattle, defenderBattle);
 
-    router.replace({
-      pathname: "battlefield",
-      params: {
-        attacker: JSON.stringify(attacker),
-        defender: JSON.stringify(defender),
-      },
-    });
+    router.replace("battlefield");
   };
+
+  useEffect(() => {
+    methods.setValue("attacker_troops", 10);
+    methods.setValue("defender_troops", 10);
+  }, [methods]);
 
   return (
     <ScrollView
@@ -81,14 +81,14 @@ export default function SelectTroopsScreen() {
               gap: 50,
             }}
           >
+            <CardPlayer {...defender} />
+
             <Input
-              name="attacker_troops"
+              name="defender_troops"
               label="Quantidade de tropas"
               textAlign="center"
               keyboardType="numeric"
             />
-
-            <CardPlayer {...attacker} />
 
             {attacker_troops_value > 0 && defender_troops_value > 0 ? (
               <Button
@@ -101,14 +101,14 @@ export default function SelectTroopsScreen() {
               <BattleDivider />
             )}
 
-            <CardPlayer {...defender} />
-
             <Input
-              name="defender_troops"
+              name="attacker_troops"
               label="Quantidade de tropas"
               textAlign="center"
               keyboardType="numeric"
             />
+
+            <CardPlayer {...attacker} />
           </View>
         </View>
       </FormProvider>
